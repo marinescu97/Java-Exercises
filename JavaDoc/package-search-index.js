@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"Arrays"},{"l":"CardsGame"},{"l":"Exercises"},{"l":"Files"},{"l":"Interfaces"},{"l":"Interfaces.SoftwareProducts"},{"l":"Interfaces.VehicleCompany"},{"l":"Objects"},{"l":"Objects.AgentieImobiliara"},{"l":"Objects.Examen"},{"l":"Swing"},{"l":"Swing.PhoneBook"}];updateSearchResults();
