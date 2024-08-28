@@ -14,7 +14,7 @@ public class Matrix {
      * Creates an instance of the {@link Matrix} object.
      * @param matrix A two-dimensional matrix.
      */
-    Matrix(int[][] matrix){
+    public Matrix(int[][] matrix){
         this.matrix = matrix;
     }
 
@@ -30,11 +30,15 @@ public class Matrix {
      * Displays the matrix.
      */
     public void display(){
-        for (int[] i : this.matrix) {
-            for (int j = 0; j < this.matrix.length; j++) {
-                System.out.print(i[j] + " ");
+        if (matrix != null){
+            for (int[] i : this.matrix) {
+                for (int j = 0; j < this.matrix.length; j++) {
+                    System.out.print(i[j] + " ");
+                }
+                System.out.println();
             }
-            System.out.println();
+        } else {
+            System.out.println("The array is not set.");
         }
     }
 
@@ -129,7 +133,7 @@ public class Matrix {
      * @param length The length of submatrix.
      * @return The sum of elements.
      */
-    public int sumSubmatrix(int startRow, int startCol, int length) {
+    private int sumSubmatrix(int startRow, int startCol, int length) {
         int sum = 0;
         for (int i = startRow; i < startRow + length; i++) {
             for (int j = startCol; j < startCol + length; j++) {

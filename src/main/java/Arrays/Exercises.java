@@ -1,7 +1,6 @@
 package Arrays;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 /**
@@ -9,24 +8,13 @@ import java.util.stream.Stream;
  */
 public class Exercises {
     /**
-     * A {@link Scanner} object used for text input.
+     * Constructs a one-dimensional array, whose components are numbers from the interval [a, b] divisible by 3, ordered in descending order.
      */
-    static Scanner scn = new Scanner(System.in);
-
-    /**
-     * Constructs a one-dimensional array, whose components are numbers from the interval [a, b] (read from the keyboard) divisible by 3, ordered in descending order.
-     */
-    private static void displayArrayRange(){
-        System.out.print("a = ");
-        int a = scn.nextInt();
-        System.out.print("b = ");
-        int b = scn.nextInt();
-
-        if (a > b){
+    public int[] displayArrayRange(int a, int b){
+        if (a > b || a == b){
             System.out.println("a should be less than b");
-            displayArrayRange();
+            return null;
         } else {
-            int v[];
             int count = 0;
 
             for (int i = a; i<=b; i++){
@@ -35,7 +23,7 @@ public class Exercises {
                 }
             }
 
-            v = new int[count];
+            int[] v = new int[count];
             int index = 0;
             for (int i = b; i>=a; i--){
                 if (i%3 == 0){
@@ -43,111 +31,87 @@ public class Exercises {
                     index++;
                 }
             }
-            for (int i : v){
-                System.out.print(i + " ");
-            }
+            return v;
         }
     }
 
     /**
-     * Constructs a {@link Stream}, whose components are numbers from the interval [a, b] (read from the keyboard) divisible by 3, ordered in descending order.
+     * Constructs a {@link Stream}, whose components are numbers from the interval [a, b] divisible by 3, ordered in descending order.
      */
 
-    private static void displayArrayRangeStream(){
-        System.out.print("a = ");
-        int a = scn.nextInt();
-        System.out.print("b = ");
-        int b = scn.nextInt();
-
-        if (a > b){
+    public int[] displayArrayRangeStream(int a, int b){
+        if (a > b || a == b){
             System.out.println("a should be less than b");
-            displayArrayRange();
-        } else {
-            Stream.iterate(a, n -> n <= b, n -> n + 1)
-                    .filter(n -> n % 3 == 0)
-                    .sorted(Comparator.reverseOrder())
-                    .forEach(n -> System.out.print(n + " "));
+            return null;
         }
+        return Stream.iterate(a, n -> n <= b, n -> n + 1)
+                .filter(n -> n % 3 == 0)
+                .sorted(Comparator.reverseOrder())
+                .mapToInt(Integer::intValue)
+                .toArray();
     }
 
     /**
-     * Constructs an {@link ArrayList}, whose components are numbers from the interval [a, b] (read from the keyboard) divisible by 3, ordered in descending order.
+     * Constructs an {@link ArrayList}, whose components are numbers from the interval [a, b] divisible by 3, ordered in descending order.
      */
-    private static void displayArrayListRange(){
-        System.out.print("a = ");
-        int a = scn.nextInt();
-        System.out.print("b = ");
-        int b = scn.nextInt();
-
-        if (a > b){
+    public List<Integer> displayArrayListRange(int a, int b){
+        if (a > b || a == b){
             System.out.println("a should be less than b");
-            displayArrayListRange();
-        } else {
-            List<Integer> v = new ArrayList<>();
-            for (int i = b; i>=a; i--){
-                if (i % 3 == 0){
-                    v.add(i);
-                }
-            }
-            for (int i : v){
-                System.out.print(i + " ");
+            return null;
+        }
+        List<Integer> v = new ArrayList<>();
+        for (int i = b; i>=a; i--){
+            if (i % 3 == 0){
+                v.add(i);
             }
         }
+
+        return v;
     }
 
     /**
-     * Displays the maximum number formed by the elements of an array.
+     * Displays the maximum possible number that can be formed by concatenating the maximum digits from each element in the input array.
      */
-    private static void maxNumber(){
-        System.out.print("Enter the number of elements of the array: ");
-        int length = scn.nextInt();
-
-        if (length<2){
-            System.out.println("Enter a length greater than or equal to 2");
-            maxNumber();
-        } else {
-            int arr[] = new int[length];
-            for (int i=0; i<length; i++){
-                System.out.print("Item no." + (i+1) + ": ");
-                arr[i] = scn.nextInt();
-            }
-
-            int max[] = new int[length];
-            int digit;
-
-            for (int i=0; i< arr.length; i++){
-                digit = 0;
-                while (arr[i] != 0){
-                    int remaining = arr[i] % 10;
-                    digit = max(digit, remaining);
-                    arr[i]/=10;
-                }
-                max[i] = digit;
-            }
-
-            max = sortIntegersDesc(max);
-
-            int number = 0;
-
-            for (int i : max){
-                number = number * 10 + i;
-            }
-
-            System.out.println("The largest number formed by the elements of the array: " + number);
+    public int maxNumber(int[] array){
+        if (array.length<2){
+            return 0;
         }
+
+        int[] max = new int[array.length];
+        int digit;
+
+        for (int i=0; i< array.length; i++){
+            digit = 0;
+            if (array[i] < 0){
+                array[i] *= -1;
+            }
+            while (array[i] != 0){
+                int remaining = array[i] % 10;
+                digit = max(digit, remaining);
+                array[i]/=10;
+            }
+            max[i] = digit;
+        }
+
+        max = sortIntegersDesc(max);
+
+        int number = 0;
+
+        for (int i : max){
+            number = number * 10 + i;
+        }
+
+        return number;
     }
 
     /**
-     * This is a helper method for {@link #maxNumber()} method.
+     * This is a helper method for {@link #maxNumber(int[])} method.
      * @param a The first number.
      * @param b The second number.
      * @return The maximum number between the two numbers.
      */
-    private static int max(int a, int b){
-        if (a>b){
-            return a;
-        }
-        return b;
+    public int max(int a, int b){
+        return Math.max(a, b);
     }
 
     /**
@@ -155,11 +119,13 @@ public class Exercises {
      * @param array The array to be sort.
      * @return The sorted array.
      */
-    private static int[] sortIntegers(int [] array){
-        int[] sortedArray = new int[array.length];
-        for (int i=0; i<array.length; i++){
-            sortedArray[i] = array[i];
+    public int[] sortIntegers(int[] array){
+        if (array == null){
+            return null;
         }
+
+        int[] sortedArray = new int[array.length];
+        System.arraycopy(array, 0, sortedArray, 0, array.length);
         boolean flag = true;
         int temp;
         while (flag){
@@ -181,7 +147,11 @@ public class Exercises {
      * @param array The array to sort.
      * @return The sorted array.
      */
-    private static int[] sortIntegersStream(int[] array){
+    public int[] sortIntegersStream(int[] array){
+        if (array == null){
+            return null;
+        }
+
         return Arrays.stream(array).sorted().toArray();
     }
 
@@ -190,11 +160,13 @@ public class Exercises {
      * @param array The array to be sort.
      * @return The sorted array.
      */
-    private static int[] sortIntegersDesc(int [] array){
-        int[] sortedArray = new int[array.length];
-        for (int i=0; i<array.length; i++){
-            sortedArray[i] = array[i];
+    public int[] sortIntegersDesc(int[] array){
+        if (array == null){
+            return null;
         }
+
+        int[] sortedArray = new int[array.length];
+        System.arraycopy(array, 0, sortedArray, 0, array.length);
         boolean flag = true;
         int temp;
         while (flag){
@@ -217,7 +189,11 @@ public class Exercises {
      * @return The sorted array.
      */
 
-    private static int[] sortIntegersDescStream(int[] array){
+    public int[] sortIntegersDescStream(int[] array){
+        if (array == null){
+            return null;
+        }
+
         return Arrays.stream(array).boxed().sorted((a, b) -> b - a).mapToInt(i -> i).toArray();
     }
 
@@ -226,7 +202,10 @@ public class Exercises {
      * @param array The array to be sort.
      * @return The sorted array.
      */
-    private static int[] sortEvenIntegers(int[] array){
+    public int[] sortEvenIntegers(int[] array){
+        if (array == null){
+            return null;
+        }
         ArrayList<Integer> evens = new ArrayList<>();
 
         for (int i : array){
@@ -255,7 +234,10 @@ public class Exercises {
      *       v=(5 3 2 2 3) => NO
      * @param arr The array to be checked.
      */
-    private static void checkDepression(int[] arr){
+    public boolean checkDepression(int[] arr){
+        if (arr == null){
+            return false;
+        }
         int position = 0;
 
         for (int i=0; i<arr.length-1; i++){
@@ -271,13 +253,9 @@ public class Exercises {
                     position++;
                 }
             }
-            if (arr[position+1] == arr[arr.length-1]){
-                System.out.println("YES");
-            } else {
-                System.out.println("NO");
-            }
+            return arr[position + 1] == arr[arr.length - 1];
         } else {
-            System.out.println("NO");
+            return false;
         }
     }
 
@@ -287,7 +265,10 @@ public class Exercises {
      *       n=566 => NO
      * @param arr The array to be checked.
      */
-    private static void checkSameNumberOfDigits(int[] arr){
+    public boolean checkSameNumberOfDigits(int[] arr){
+        if (arr == null){
+            return false;
+        }
         boolean result = true;
 
         for (int i = 0; i<arr.length-1; i++){
@@ -297,11 +278,7 @@ public class Exercises {
             }
         }
 
-        if (result){
-            System.out.println("YES");
-        } else {
-            System.out.println("NO");
-        }
+        return result;
     }
 
     /**
@@ -310,7 +287,11 @@ public class Exercises {
      * @param n The number.
      * @return The number of occurrences.
      */
-    private static int occurrencesNumber(int[] arr, int n){
+    public int occurrencesNumber(int[] arr, int n){
+        if (arr == null){
+            return 0;
+        }
+
         int count = 0;
         for (int i : arr){
             if (i == n){
@@ -322,57 +303,36 @@ public class Exercises {
 
     /**
      * Checks if the elements of two arrays form two sets of directly proportional or inversely proportional numbers.
-     *
+     * <p>
      * Directly proportional: the ratios formed by numbers in the same position in the two arrays must be equal.
      * E.g.: a=(2 5 7) and b=( 6 15 21) => 2/6=5/15=7/21
-     *
+     * <p>
      * inversely proportional: it is checked if the products between the first element of a and the last element of b,
      * the second element of a and the penultimate element of b, etc., are equal.
-     * E.g.: a=(2 6 8) and b=(3 4 12) => 2*12=6*4=8*3
+     * E.g.: a=(2 6 8) and b=(12, 4, 3) => 2*12=6*4=8*3
      */
-    private static void directlyOrInverselyProportional(){
-        System.out.print("Enter the length of the arrays: ");
-        int length = scn.nextInt();
-        int[] arr1 = new int[length];
-        int[] arr2 = new int[length];
-
-        for (int i = 0; i < 2; i++){
-            System.out.println("Enter the elements of the array " + (i+1) + ":");
-            for (int j = 0; j < length; j++){
-                System.out.print("Item no." + (j+1) + ": ");
-                if (i == 0){
-                    arr1[j] = scn.nextInt();
-                } else {
-                    arr2[j] = scn.nextInt();
-                }
-            }
+    public String directlyOrInverselyProportional(int[] arr1, int[] arr2){
+        if (arr1 == null || arr2 == null){
+            return null;
         }
-
-        arr1 = sortIntegers(arr1);
-        arr2 = sortIntegers(arr2);
 
         boolean directProp = true, inversProp = true;
 
-        for (int i = 0; i<length-1; i++){
-            if ((arr1[i] / arr2[i]) != (arr1[i+1] / arr2[i+1])){
+        for (int i = 0; i< arr1.length; i++){
+            if ((arr1[i] / arr2[i]) != (arr1[0] / arr2[0])){
                 directProp = false;
             }
-        }
-
-        arr2 = sortIntegersDesc(arr2);
-
-        for (int i = 0; i<length-1; i++){
-            if ((arr1[i] * arr2[i]) != (arr1[i+1] * arr2[i+1])){
+            if ((arr1[i] * arr2[i]) != (arr1[0] * arr2[0])){
                 inversProp = false;
             }
         }
 
         if (directProp){
-            System.out.println("Directly proportional");
+            return "Directly proportional";
         } else if (inversProp) {
-            System.out.println("Inversely proportional");
+            return "Inversely proportional";
         } else {
-            System.out.println("The arrays are neither directly proportional nor inversely proportional\n");
+            return "The arrays are neither directly proportional nor inversely proportional";
         }
     }
 }

@@ -1,5 +1,7 @@
 package Arrays;
 
+import java.util.Arrays;
+
 /**
  * This class creates an array object with integers and operations on it.
  */
@@ -20,11 +22,12 @@ public class IntegersArray {
      * Constructor of the class that receives as a parameter an array that stores the elements of the set of maximum length 10.
      * @param array An array of integers.
      */
-    IntegersArray(int[] array){
+    public IntegersArray(int[] array){
         if(array.length<=10){
             this.arr = array;
         } else {
             System.out.println("Maximum length 10!");
+            this.arr = null;
         }
     }
 
@@ -32,10 +35,14 @@ public class IntegersArray {
      * Constructor of the class that creates the array of n randomly generated elements.
      * @param n The array length (1 <= n <= 10).
      */
-    IntegersArray(int n){
-        this.arr = new int[n];
-        for (int i=0; i<arr.length; i++){
-            arr[i] =(int) (Math.random() * 10);
+    public IntegersArray(int n){
+        if (n > 0){
+            this.arr = new int[n];
+            for (int i=0; i<arr.length; i++){
+                arr[i] =(int) (Math.random() * 10);
+            }
+        } else {
+            this.arr = null;
         }
     }
 
@@ -45,6 +52,37 @@ public class IntegersArray {
      */
     public int[] getArr() {
         return arr;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || this.arr == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        return Arrays.equals(this.arr, ((IntegersArray) obj).arr);
+    }
+
+    /**
+     * Returns an array which length is the maximum element between this array and the given array.
+     * @param array The given array.
+     * @return The maximum array.
+     */
+    public IntegersArray max(int[] array){
+        int max = 0;
+        for (int k : this.arr) {
+            if (k > max) {
+                max = k;
+            }
+        }
+        for (int k : array) {
+            if (k > max) {
+                max = k;
+            }
+        }
+        return new IntegersArray(max+1);
     }
 
     /**
@@ -57,20 +95,8 @@ public class IntegersArray {
     public int[] reunion(int[] array){
         // Initializes the length of the new array (both arrays accepting only numbers from the range [0, 9]).
         // "max" will be the largest number from the two arrays, the array of the IntegersArray object, and the array received as a parameter.
-        int max = 0;
-        for (int k : this.arr) {
-            if (k > max) {
-                max = k;
-            }
-        }
-        for (int k : array) {
-            if (k > max) {
-                max = k;
-            }
-        }
 
-        // Creates a new array of the length of the variable "max".
-        IntegersArray reunion = new IntegersArray(max+1);
+        IntegersArray reunion = max(array);
 
         for (int i=0; i<reunion.getArr().length; i++){
             int exists = 0;
@@ -101,28 +127,20 @@ public class IntegersArray {
      * @return An intersection of the two arrays.
      */
     public int[] intersection(int[] array){
-        int max = 0;
-        for (int k : this.arr) {
-            if (k > max) {
-                max = k;
-            }
-        }
-        for (int k : array) {
-            if (k > max) {
-                max = k;
-            }
-        }
-        IntegersArray intersection = new IntegersArray(max+1);
+        IntegersArray intersection = max(array);
+
         for (int i=0; i< intersection.getArr().length; i++){
             int exists = 0;
             for (int k : this.arr) {
                 if (k == i) {
                     exists++;
+                    break;
                 }
             }
             for (int k : array) {
                 if (k == i) {
                     exists++;
+                    break;
                 }
             }
             if (exists==0 || exists==1){
@@ -140,28 +158,25 @@ public class IntegersArray {
      * @param number The number to be inserted.
      */
     public void insertItem(int position, int number){
-        int[] array = new int[this.arr.length+1];
+        if (number >= 0){
+            int[] array = new int[this.arr.length+1];
 
-        if (position == 0){
-            array[0] = number;
-            for (int i=1; i<array.length; i++){
-                array[i] = this.arr[i-1];
+            if (position == 0){
+                array[0] = number;
+                System.arraycopy(this.arr, 0, array, 1, array.length - 1);
+            } else if (position == this.arr.length+1){
+                for (int i=0; i<this.arr.length; i++){
+                    array[i] = this.arr[i];
+                    array[array.length] = number;
+                }
+            } else {
+                if (position >= 0) System.arraycopy(this.arr, 0, array, 0, position);
+                array[position] = number;
+                if (array.length - (position + 1) >= 0)
+                    System.arraycopy(this.arr, position + 1 - 1, array, position + 1, array.length - (position + 1));
             }
-        } else if (position == this.arr.length+1){
-            for (int i=0; i<this.arr.length; i++){
-                array[i] = this.arr[i];
-                array[array.length] = number;
-            }
-        } else {
-            for (int i=0; i<position; i++){
-                array[i] = this.arr[i];
-            }
-            array[position] = number;
-            for (int i= position+1; i<array.length; i++){
-                array[i] = this.arr[i-1];
-            }
+            this.arr = array;
         }
-        this.arr = array;
     }
 
     /**
@@ -169,14 +184,16 @@ public class IntegersArray {
      * @param position The position from which the element should be deleted.
      */
     public void deleteElement(int position){
-        int[] array = new int[this.arr.length-1];
-        for (int i=0, k=0; i<this.arr.length; i++){
-            if (i!=position){
-                array[k] = this.arr[i];
-                k++;
+        if (position < this.arr.length){
+            int[] array = new int[this.arr.length-1];
+            for (int i=0, k=0; i<this.arr.length; i++){
+                if (i!=position){
+                    array[k] = this.arr[i];
+                    k++;
+                }
             }
+            this.arr = array;
         }
-        this.arr = array;
     }
 
     /**
@@ -201,7 +218,7 @@ public class IntegersArray {
                 zero++;
             }
         }
-        if (zero == 10){
+        if (zero == arr.length){
             System.out.println("---");
         } else {
             for (int j : this.arr) {
@@ -226,14 +243,14 @@ class Test{
         secondArr.display();
 
         System.out.println("The reunion: ");
-        int reunion[] = firstArr.reunion(secondArr.getArr());
+        int[] reunion = firstArr.reunion(secondArr.getArr());
         for (int i : reunion){
             System.out.print(i + " ");
         }
         System.out.println();
 
         System.out.println("The intersection: ");
-        int intersection[] = firstArr.intersection(secondArr.getArr());
+        int[] intersection = firstArr.intersection(secondArr.getArr());
         for (int i : intersection){
             System.out.print(i + " ");
         }
