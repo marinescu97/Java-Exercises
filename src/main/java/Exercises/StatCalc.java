@@ -21,12 +21,12 @@ public class StatCalc {
     /**
      * Displays the information of the array of integers.
      */
-    public void display(){
+    private void display(){
         for (int j : this.calc) {
             System.out.print(j + " ");
         }
         System.out.println();
-        System.out.printf("Number of elements: %d\nThe sum: %d\nThe mean: %d\nThe minimum: %d\nThe maximum: %d\nThe standard deviation: %.2f",
+        System.out.printf("Number of elements: %d\nThe sum: %d\nThe mean: %.2f\nThe minimum: %d\nThe maximum: %d\nThe standard deviation: %.2f",
                             getCount(), getSum(), getMean(), getMin(), getMax(), getStandardDeviation());
     }
 
@@ -34,7 +34,7 @@ public class StatCalc {
      * Gets the number of integers.
      * @return The number of integers.
      */
-    public int getCount(){
+    private int getCount(){
         return calc.length;
     }
 
@@ -42,7 +42,7 @@ public class StatCalc {
      * Gets the sum of integers.
      * @return The sum.
      */
-    public int getSum(){
+    private int getSum(){
         int s = 0;
         for (int j : calc) {
             s += j;
@@ -54,15 +54,17 @@ public class StatCalc {
      * Gets the mean of the numbers.
      * @return The mean.
      */
-    public int getMean(){
-        return this.getSum()/ calc.length;
+    private double getMean(){
+        double mean = this.getSum() / this.getCount();
+
+        return Math.round(mean * 100.0) / 100.0;
     }
 
     /**
      * Gets the minimum between numbers.
      * @return The minimum.
      */
-    public int getMin(){
+    private int getMin(){
         int min = calc[0];
         for (int j : calc) {
             if (j < min) {
@@ -76,7 +78,7 @@ public class StatCalc {
      * Gets the maximum between numbers.
      * @return The maximum.
      */
-    public int getMax(){
+    private int getMax(){
         int max = calc[0];
         for (int j : calc) {
             if (j > max) {
@@ -91,20 +93,16 @@ public class StatCalc {
      * @return The standard deviation.
      */
     public double getStandardDeviation(){
-        int sd = 0;
-        for (int j : calc) {
-            sd += Math.pow(j - this.getMean(), 2);
+        double standardDeviation = 0.0;
+        for (double num : calc) {
+            standardDeviation += Math.pow(num - getMean(), 2);
         }
-        return Math.sqrt(sd/ calc.length);
+        double result = Math.sqrt(standardDeviation / getCount());
+        return Math.round(result * 100.0) / 100.0;
     }
-}
 
-/**
- * The class tests the functionality of the {@link StatCalc} class.
- */
-class Test {
-    public static void main(String[] args) {
-        StatCalc statCalc = new StatCalc(new int[]{69, 27, 10});
+    public static void calculator(int[] elements){
+        StatCalc statCalc = new StatCalc(elements);
         statCalc.display();
     }
 }

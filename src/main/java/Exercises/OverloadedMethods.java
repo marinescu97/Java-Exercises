@@ -6,22 +6,21 @@ import java.util.Scanner;
  * This class contains overloaded methods.
  */
 public class OverloadedMethods {
-    /**
-     * A {@link Scanner} object used for text input.
-     */
-    static Scanner s = new Scanner(System.in);
-
     // Overloaded methods that display squares.
     /**
      * Displays a square of given side and default symbol.
      * @param l The given side.
      */
-    private static void displaySquare(int l){
-        for (int i=0; i<l; i++){
-            for (int j=0; j<l; j++){
-                System.out.print("*");
+    public static void displaySquare(int l){
+        if (l < 0){
+            System.out.println("The number must be positive!");
+        } else {
+            for (int i=0; i<l; i++){
+                for (int j=0; j<l; j++){
+                    System.out.print("*");
+                }
+                System.out.println();
             }
-            System.out.println();
         }
     }
 
@@ -30,12 +29,16 @@ public class OverloadedMethods {
      * @param l The given side.
      * @param c The given symbol.
      */
-    private static void displaySquare(int l, char c){
-        for (int i=0; i<l; i++){
-            for (int j=0; j<l; j++){
-                System.out.print(c);
+    public static void displaySquare(int l, char c){
+        if (l < 0){
+            System.out.println("The number must be positive!");
+        } else {
+            for (int i=0; i<l; i++){
+                for (int j=0; j<l; j++){
+                    System.out.print(c);
+                }
+                System.out.println();
             }
-            System.out.println();
         }
     }
 
@@ -46,7 +49,11 @@ public class OverloadedMethods {
      * @param length The side of the square.
      * @return The area.
      */
-    private static int area(int length){
+    public static int area(int length){
+        if (length < 0){
+            System.out.println("The number must be positive!");
+            return 0;
+        }
         return length * length;
     }
 
@@ -56,7 +63,11 @@ public class OverloadedMethods {
      * @param width The width of the rectangle.
      * @return The area.
      */
-    private static int area(int length, int width){
+    public static int area(int length, int width){
+        if (length <= 0 || width <= 0){
+            System.out.println("The values must be positive!");
+            return 0;
+        }
         return length * width;
     }
 
@@ -68,7 +79,10 @@ public class OverloadedMethods {
      * @return The final grade.
      */
     private static float finalGrade(float partial, float laboratory, float exam) {
-        return (float) (20.0f / 100.0f) * partial + (20.0f / 100.0f) * laboratory + (60.0f / 100.0f) * exam;
+        float finalPartial = (20.0f / 100.0f) * partial;
+        float finalLab = (20.0f / 100.0f) * laboratory;
+        float finalExam = (60.0f / 100.0f) * exam;
+        return (float) ((Math.floor(finalPartial * 10) / 10) + (Math.floor(finalLab * 10) / 10) + (Math.floor(finalExam * 10) / 10));
     }
 
     /**
@@ -78,17 +92,20 @@ public class OverloadedMethods {
      * @return The final grade.
      */
     private static float finalGrade(float laboratory, float exam) {
-        return (float) (30.0f / 100.0f) * laboratory + (70.0f / 100.0f) * exam;
+        float finalLab = (30.0f / 100.0f) * laboratory;
+        float finalExam = (70.0f / 100.0f) * exam;
+        return (float) ((Math.ceil(finalLab * 10) / 10) + (Math.ceil(finalExam * 10) / 10));
     }
 
     /**
      * Displays the data of a student.
      */
-    private static void displayStudentData(){
+    public static void displayStudentData(){
+        Scanner s = new Scanner(System.in);
         System.out.print("Exam: ");
         String name = s.nextLine();
 
-        System.out.print("Does the student have a partial grade? (y/n)\n");
+        System.out.println("Does the student have a partial grade? (y/n)");
         char part = s.nextLine().charAt(0);
 
         if (part == 'y') {
@@ -101,7 +118,11 @@ public class OverloadedMethods {
             System.out.print("Exam: ");
             float exam = s.nextFloat();
 
-            System.out.println(name + "\nFinal grade: " + finalGrade(partial, laboratory, exam));
+            if (partial <= 0 || laboratory <=0 || exam <=0){
+                System.out.println(name + "\nPlease enter valid values!");
+            } else {
+                System.out.println(name + "\nFinal grade: " + finalGrade(partial, laboratory, exam));
+            }
         } else if (part=='n') {
             System.out.print("Laboratory: ");
             float laboratory = s.nextFloat();
@@ -109,11 +130,11 @@ public class OverloadedMethods {
             System.out.print("Exam: ");
             float exam = s.nextFloat();
 
-            System.out.println(name + "\nFinal grade: " + finalGrade(laboratory, exam));
+            if (laboratory <= 0 || exam <= 0){
+                System.out.println(name + "\nPlease enter valid values!");
+            } else {
+                System.out.println(name + "\nFinal grade:" + finalGrade(laboratory, exam));
+            }
         }
-    }
-
-    public static void main(String[] args) {
-
     }
 }

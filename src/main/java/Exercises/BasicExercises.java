@@ -1,11 +1,16 @@
 package Exercises;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.Scanner;
 
 /**
  * This class contains a set of basic exercises in java.
  */
 public class BasicExercises {
+    public BasicExercises() {
+    }
+
     /**
      * A {@link Scanner} object used for text input.
      */
@@ -19,9 +24,9 @@ public class BasicExercises {
      * @param x The real value of the function.
      * @return The value of the mathematical function.
      */
-    private static int f(int x){
+    private int func(int x){
         if (x<=-3){
-            return x*x+1;
+            return (x*x)+1;
         } else if (x>=3) {
             return (x*x) - (4*x) + 5;
         } else {
@@ -34,7 +39,7 @@ public class BasicExercises {
      * @param x The integer to be checked.
      * @return True is the integer is perfect, otherwise false.
      */
-    private static boolean isPerfect(int x){
+    public static boolean isPerfect(int x){
         int sum = 0;
         for (int i=1; i<x; i++){
             if (x % i == 0){
@@ -49,7 +54,7 @@ public class BasicExercises {
      * @param x The integer to be checked.
      * @return True is the integer is a palindrome, otherwise false.
      */
-    private static boolean isPalindrome(int x){
+    public boolean isPalindrome(int x){
         int reversed = 0;
         int temp = x;
         while (temp>0){
@@ -63,7 +68,7 @@ public class BasicExercises {
      * Calculates and displays the sum of integers in the range [1,15].
      * @return The sum of integers.
      */
-    private static int sum(){
+    public int sum(){
         int sum = 0;
         for (int i=1; i<=15; i++){
             sum+=i;
@@ -73,9 +78,9 @@ public class BasicExercises {
 
     /**
      * Calculates and displays the product of even integers in the range [1,20]
-     * @return
+     * @return The product.
      */
-    private static long product(){
+    public long product(){
         long prod = 1;
         for (int i=1; i<=20; i++){
             if (i%2==0){
@@ -85,7 +90,7 @@ public class BasicExercises {
         return prod;
     }
 
-    private static long product1(){
+    public long product1(){
         long prod = 1;
         for (int i=2; i<=20; i+=2){
             prod *= i;
@@ -93,7 +98,7 @@ public class BasicExercises {
         return prod;
     }
 
-    private static long product2(){
+    public long product2(){
         long prod = 1;
         int x = 20;
         while (x>0){
@@ -108,7 +113,7 @@ public class BasicExercises {
      * @param x The number of the month.
      * @return The name of the corresponding month.
      */
-    private static String month(int x){
+    public String month(int x){
         return switch (x) {
             case 1 -> "January";
             case 2 -> "February";
@@ -131,8 +136,8 @@ public class BasicExercises {
      * @param fahrenheit The temperature in degrees Fahrenheit.
      * @return The temperature in degrees Celsius.
      */
-    private static double convertToCelsius(double fahrenheit){
-        return 5/9 * (fahrenheit - 32);
+    public double convertToCelsius(double fahrenheit){
+        return Math.round(((fahrenheit - 32) * 5/9) * 100.00) / 100.00;
     }
 
     /**
@@ -140,58 +145,42 @@ public class BasicExercises {
      * @param celsius The temperature in degrees Celsius.
      * @return The temperature in degrees Fahrenheit.
      */
-    private static double convertToFahrenheit(double celsius){
-        return 9/5 * celsius+32;
+    public double convertToFahrenheit(double celsius){
+        return Math.round(((celsius * 9/5) + 32) * 100.00) / 100.00;
     }
 
     /**
      * Stores two integers read from the keyboard and returns the sum, difference, product, maximum and minimum between the numbers.
      */
-    private static void calc(){
-        System.out.print("a = ");
-        int a = scanner.nextInt();
-        System.out.print("b = ");
-        int b = scanner.nextInt();
+    public void calc(int a, int b){
+//        System.out.print("a = ");
+//        int a = scanner.nextInt();
+//        System.out.print("b = ");
+//        int b = scanner.nextInt();
 
         System.out.println("Sum: " + (a + b));
         System.out.println("Difference: " + (a - b));
         System.out.println("Product: " + (a * b));
         System.out.println("Maximum: " + Math.max(a, b));
         System.out.println("Minimum: " + Math.min(a, b));
+
     }
 
     /**
      * Displays a square filled with the symbol "*" whose side is specified as a method parameter.
      * @param l The square's side.
      */
-    private static void displaySquare(int l){
-        for (int i=0; i<l; i++){
-            for (int j=0; j<l; j++){
-                System.out.print("*");
+    public void displaySquare(int l){
+        if (l > 0){
+            for (int i=0; i<l; i++){
+                for (int j=0; j<l; j++){
+                    System.out.print("*");
+                }
+                System.out.println();
             }
-            System.out.println();
+        } else {
+            System.out.println("The length should be greater than 0.");
         }
-    }
-
-    /**
-     * Calculates the value of e^x using the formula: e^x = ∑ xn/n! = 1 + x + x2/2! + x3/3! + …., n=0,∞.
-     * Since the series is infinite, the calculation ends when the general term is less than ε (whose value is taken from the keyboard): | xn/n! | < ε.
-     * ε represents the precision that will approximate the ex value (usually eps<<1, in our case eps=10-5).
-     * @param x The general term.
-     * @return The value of e^x.
-     */
-    private static float exponential(float x) {
-        float suma = 1;
-        float n=1;
-        float general_term = Math.abs((float) (Math.pow(x,n)/factorial(n)));
-        System.out.print("eps = ");
-        float eps = scanner.nextFloat();
-        while (general_term<eps){
-            suma += Math.pow(x,n)/factorial(n);
-            n++;
-            general_term = Math.abs((float) (Math.pow(x,n)/factorial(n)));
-        }
-        return suma;
     }
 
     /**
@@ -199,12 +188,20 @@ public class BasicExercises {
      * @param n The given number.
      * @return The factorial.
      */
-    private static float factorial(float n){
-        float fact = 1;
-        for (int i=1; i<=n; i++){
-            fact *= i;
+    public BigDecimal factorial(int n){
+        if (n >= 0){
+            BigDecimal result = BigDecimal.ONE;
+            for (int i=1; i<=n; i++){
+                result = result.multiply(BigDecimal.valueOf(i));
+            }
+            if (n <= 14){
+                return result;
+            }
+            return result.round(new MathContext(10)).stripTrailingZeros();
         }
-        return fact;
+
+        System.out.println("The number must be >= 0");
+        return null;
     }
 
     /**
@@ -212,21 +209,24 @@ public class BasicExercises {
      * @param x The given number.
      * @return The number of divisors.
      */
-    private static int divisorsNumber(int x){
-        int number = 0;
-        for (int i=1; i<=x; i++){
-            if (x % i == 0){
-                number++;
+    public static int divisorsNumber(int x){
+        if (x > 0){
+            int number = 0;
+            for (int i=1; i<=x; i++){
+                if (x % i == 0){
+                    number++;
+                }
             }
+            return number;
         }
-        return number;
+        return 0;
     }
 
     /**
      * Returns an integer in the range [1.10000] that has the highest number of divisors.
      * @return The integer.
      */
-    private static int highestNumberOfDivisors(){
+    public int highestNumberOfDivisors(){
         int divNumber = divisorsNumber(1);
         int theHighestNumber = 1;
         for (int i=1; i<=10000; i++){
@@ -251,8 +251,8 @@ public class BasicExercises {
      *             *********
      *             **********
      */
-    private static void star(){
-        for (int i=0; i<10; i++){
+    public void star(){
+        for (int i=0; i<=10; i++){
             for (int j=0; j<i; j++){
                 System.out.print("*");
             }
@@ -266,7 +266,7 @@ public class BasicExercises {
      * @param c The character.
      * @return The number of occurrences of the character in the string.
      */
-    private static int countChars(String text, char c){
+    public int countChars(String text, char c){
         int count = 0;
         for (int i=0; i<text.length(); i++){
             if (text.charAt(i) == c){
@@ -279,7 +279,7 @@ public class BasicExercises {
     /**
      * Display the initials “M A” with the character "*".
      */
-    private static void showInitials(){
+    public void showInitials(){
         for (int i=0; i<9; i++){
             for (int j=0; j<20; j++){
                 if ((i==0 && (j==0 || j==8 || j==15)) || (i==1 && (j==0 || j==1 || j==7 || j==8))
@@ -291,9 +291,5 @@ public class BasicExercises {
             }
             System.out.println();
         }
-    }
-
-    public static void main(String[] args) {
-
     }
 }
